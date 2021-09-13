@@ -1,6 +1,4 @@
 import datetime
-import json
-from json import JSONDecodeError
 from urllib.parse import urlparse
 
 import redis
@@ -15,14 +13,14 @@ redis_instance = redis.StrictRedis(host=settings.REDIS_HOST,
 
 @api_view(['POST'])
 def visited_links(request, *args, **kwargs):
-    now_date = datetime.datetime.now().timestamp()
-    try:
-        item = json.loads(request.body)
-    except JSONDecodeError as e:
-        response = {'status': 'bad json'}
-        return Response(response, 400)
+    # try:
+    #     item = json.loads(request.body)
+    # except JSONDecodeError as e:
+    #     response = {'status': 'bad json'}
+    #     return Response(response, 400)
 
-    links_list = item.get('links')
+    links_list = request.data.getlist('links')
+
     if not links_list and not isinstance(links_list, list):
         response = {'status': 'fail'}
         return Response(response, 400)
@@ -30,7 +28,7 @@ def visited_links(request, *args, **kwargs):
     for link in links_list:
         domain = urlparse(link)
         domain = domain.netloc or domain.path
-        create_date = now_date
+        create_date = datetime.datetime.now().timestamp()
         redis_instance.set(domain, create_date)
     response = {
         'status': 'оk'
