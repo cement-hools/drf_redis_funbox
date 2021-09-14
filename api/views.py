@@ -6,29 +6,25 @@ from django.conf import settings
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-# Connect to our Redis instance
 redis_instance = redis.StrictRedis(host=settings.REDIS_HOST,
-                                   port=settings.REDIS_PORT, db=0)
+                                   port=settings.REDIS_PORT, db=0,
+                                   decode_responses=True)
 
 
 @api_view(['POST'])
 def visited_links(request, *args, **kwargs):
-    # try:
-    #     item = json.loads(request.body)
-    # except JSONDecodeError as e:
-    #     response = {'status': 'bad json'}
-    #     return Response(response, 400)
+    now_time = datetime.datetime.now().timestamp()
 
     links_list = request.data.getlist('links')
 
-    if not links_list and not isinstance(links_list, list):
+    if not links_list or 'links' not in request.data:
         response = {'status': 'fail'}
         return Response(response, 400)
 
     for link in links_list:
         domain = urlparse(link)
         domain = domain.netloc or domain.path
-        create_date = datetime.datetime.now().timestamp()
+        create_date = now_time
         redis_instance.set(domain, create_date)
     response = {
         'status': 'оk'
