@@ -1,0 +1,4 @@
+Django==3.2.7
+djangorestframework==3.12.4
+fakeredis==1.6.1
+redis==3.5.3
