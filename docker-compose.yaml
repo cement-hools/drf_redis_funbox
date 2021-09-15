@@ -1,0 +1,39 @@
+version: '3'
+
+volumes:
+  redis_volume_1:
+  static_volume:
+  nginx:
+
+services:
+  redis:
+    image: redis:latest
+    container_name: rd01
+    volumes:
+      - redis_volume_1:/usr/local/etc/redis
+    ports:
+      - '6379:6379'
+  web:
+    build: .
+    container_name: web
+    restart: always
+#    command: gunicorn django_redis.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/code/static/
+      - nginx:/code/nginx/
+    expose:
+      - 8000
+    depends_on:
+      - redis
+    env_file:
+      - .env
+  nginx:
+    image: nginx:1.19-alpine
+    volumes:
+      - static_volume:/static/
+      - nginx:/etc/nginx/conf.d/
+    ports:
+      - 80:80
+    depends_on:
+      - web
+
