@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-mgm5hnq^cmz^=&+hh7fg2cwbow@56_-9sq(azqh65^@kgtiw^j'
+SECRET_KEY = 'django-insecure-mg5hnq^cz^=&+hh7fg2cwbow@56_-9sq(azqh65^@kgtiw^j'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -52,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'django_redis_demo.urls'
+ROOT_URLCONF = 'django_redis.urls'
 
 TEMPLATES = [
     {
@@ -70,7 +70,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'django_redis_demo.wsgi.application'
+WSGI_APPLICATION = 'django_redis.wsgi.application'
 
 
 # Database
